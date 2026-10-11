@@ -16,6 +16,9 @@ require('./app_api/models/db');
 
 var app = express();
 
+// Disable ETags during development so API requests return fresh 200 responses
+app.set('etag', false);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views'));
 app.set('view engine', 'hbs');
@@ -27,9 +30,34 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Allow requests from Angular admin SPA
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
+  );
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/travel', travelRouter);
+
+// Prevent API responses from being cached during development
+app.use('/api', function(req, res, next) {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
 
 // API routes
 app.use('/api', apiRouter);
