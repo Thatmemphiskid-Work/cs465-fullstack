@@ -20,9 +20,13 @@
       per person
     </p>
 
-    <p class="card-text" [innerHTML]="trip.description"></p>
+    <p
+      class="card-text"
+      [innerHTML]="trip.description">
+    </p>
 
     <button
+      *ngIf="isLoggedIn()"
       type="button"
       class="btn btn-primary"
       (click)="editTrip(trip)">

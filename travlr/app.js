@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -16,6 +17,9 @@ require('./app_api/models/db');
 
 var app = express();
 
+var passport = require('passport');
+require('./app_api/config/passport');
+
 // Disable ETags during development so API requests return fresh 200 responses
 app.set('etag', false);
 
@@ -29,6 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 
 // Allow requests from Angular admin SPA
 app.use(function(req, res, next) {
