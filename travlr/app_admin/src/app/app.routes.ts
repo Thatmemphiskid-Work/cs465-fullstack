@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './auth.guard';
 
 import { TripListing } from './trip-listing/trip-listing';
 import { AddTrip } from './add-trip/add-trip';
@@ -12,11 +13,13 @@ export const routes: Routes = [
   },
   {
     path: 'add-trip',
-    component: AddTrip
+    component: AddTrip,
+    canActivate: [authGuard]
   },
   {
     path: 'edit-trip',
-    component: EditTrip
+    component: EditTrip,
+    canActivate: [authGuard]
   },
   {
     path: 'login',

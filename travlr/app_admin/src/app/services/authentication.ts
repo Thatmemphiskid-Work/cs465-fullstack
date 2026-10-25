@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 
 import { BROWSER_STORAGE } from '../storage';
 import { User } from '../models/user';
@@ -10,14 +11,17 @@ import { TripData } from './trip-data';
 })
 export class AuthenticationService {
   authResp: AuthResponse = new AuthResponse();
+  private token = signal('');
 
   constructor(
     @Inject(BROWSER_STORAGE) private storage: Storage,
     private tripData: TripData
-  ) {}
+  ) {
+    this.token.set(this.storage.getItem('travlr-token') || '');
+  }
 
   public getToken(): string {
-    const token = this.storage.getItem('travlr-token');
+    const token = this.token();
 
     if (!token) {
       return '';
@@ -31,10 +35,12 @@ export class AuthenticationService {
       'travlr-token',
       token
     );
+    this.token.set(token);
   }
 
   public logout(): void {
     this.storage.removeItem('travlr-token');
+    this.token.set('');
   }
 
   public isLoggedIn(): boolean {
@@ -78,29 +84,13 @@ export class AuthenticationService {
     }
   }
 
-  public login(
-    user: User,
-    password: string
-  ): void {
-    this.tripData
-      .login(user, password)
-      .subscribe({
-        next: (value: AuthResponse) => {
-          this.authResp = value;
-          this.saveToken(value.token);
-
-          console.log(
-            'Login successful'
-          );
-        },
-
-        error: (error: any) => {
-          console.error(
-            'Login error:',
-            error
-          );
-        }
-      });
+  public login(user: User, password: string): Observable<AuthResponse> {
+    return this.tripData.login(user, password).pipe(
+      tap(value => {
+        this.authResp = value;
+        this.saveToken(value.token);
+      })
+    );
   }
 
   public register(

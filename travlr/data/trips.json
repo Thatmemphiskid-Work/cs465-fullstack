@@ -28,5 +28,25 @@
     "perPerson": "1999.00",
     "image": "reef3.jpg",
     "description": "Clare's Reef - Placeholder Text 3"
+  },
+  {
+    "code": "RJTAH270215",
+    "name": "Randall Tahiti Getaway",
+    "length": "6 nights / 7 days",
+    "start": "2027-02-15T00:00:00.000Z",
+    "resort": "Coral Horizon Resort",
+    "perPerson": "1799.00",
+    "image": "reef3.jpg",
+    "description": "Updated Tahiti package with guided reef snorkeling."
+  },
+  {
+    "code": "RJFINAL1025",
+    "name": "Randall Coastal Discovery",
+    "length": "5 nights / 6 days",
+    "start": "2027-03-10T00:00:00.000Z",
+    "resort": "Coral Discovery Resort",
+    "perPerson": "1399.00",
+    "image": "reef2.jpg",
+    "description": "Updated coastal getaway including a guided reef excursion."
   }
 ]

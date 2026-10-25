@@ -3,6 +3,8 @@
 
     <h2 class="text-center mb-4">Edit Trip</h2>
 
+    <p *ngIf="message" role="status">{{ message }}</p>
+
     <form
       *ngIf="editForm"
       [formGroup]="editForm"
@@ -13,6 +15,7 @@
         <input
           type="text"
           formControlName="code"
+          readonly
           placeholder="Code"
           class="form-control"
           [ngClass]="{

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -22,9 +22,11 @@ import { TripData } from '../services/trip-data';
 export class AddTrip implements OnInit {
   public addForm!: FormGroup;
   submitted = false;
+  message = '';
 
   constructor(
     private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef,
     public router: Router,
     private tripService: TripData
   ) {}
@@ -53,6 +55,8 @@ export class AddTrip implements OnInit {
         },
         error: (error: any) => {
           console.error('Error adding trip:', error);
+          this.message = 'Unable to save trip. Check your login and required fields.';
+          this.cdr.markForCheck();
         }
       });
     }

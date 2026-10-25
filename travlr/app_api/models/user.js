@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  hashIterations: { type: Number, default: 1000 },
   hash: String,
   salt: String
 });
@@ -19,11 +20,12 @@ const userSchema = new mongoose.Schema({
 // Method to set the password on this record.
 userSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
+  this.hashIterations = 210000;
 
   this.hash = crypto.pbkdf2Sync(
     password,
     this.salt,
-    1000,
+    this.hashIterations || 1000,
     64,
     'sha512'
   ).toString('hex');
@@ -34,12 +36,14 @@ userSchema.methods.validPassword = function(password) {
   const hash = crypto.pbkdf2Sync(
     password,
     this.salt,
-    1000,
+    this.hashIterations || 1000,
     64,
     'sha512'
   ).toString('hex');
 
-  return this.hash === hash;
+  const stored = Buffer.from(this.hash || '', 'hex');
+  const candidate = Buffer.from(hash, 'hex');
+  return stored.length === candidate.length && crypto.timingSafeEqual(stored, candidate);
 };
 
 // Method to generate a JSON Web Token for the current record.

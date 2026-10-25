@@ -3,6 +3,8 @@
 
     <h2 class="text-center mb-4">Add Trip</h2>
 
+    <p *ngIf="message" role="alert">{{ message }}</p>
+
     <form
       *ngIf="addForm"
       [formGroup]="addForm"

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -25,6 +25,7 @@ export class Login {
 
   constructor(
     private router: Router,
+    private cdr: ChangeDetectorRef,
     private authenticationService: AuthenticationService
   ) {}
 
@@ -45,18 +46,12 @@ export class Login {
       email: this.credentials.email
     } as User;
 
-    this.authenticationService.login(
-      user,
-      this.credentials.password
-    );
-
-    setTimeout(() => {
-      if (this.authenticationService.isLoggedIn()) {
-        this.router.navigate(['']);
-      } else {
-        this.formError =
-          'Login failed. Please check your email and password.';
+    this.authenticationService.login(user, this.credentials.password).subscribe({
+      next: () => this.router.navigate(['']),
+      error: () => {
+        this.formError = 'Login failed. Please check your email and password.';
+        this.cdr.markForCheck();
       }
-    }, 750);
+    });
   }
 }

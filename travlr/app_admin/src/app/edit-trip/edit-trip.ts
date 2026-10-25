@@ -95,6 +95,8 @@ export class EditTrip implements OnInit {
 
         error: (error: any) => {
           console.error('Error updating trip:', error);
+          this.message = 'Unable to save trip. Check your login and try again.';
+          this.cdr.markForCheck();
         }
       });
     }

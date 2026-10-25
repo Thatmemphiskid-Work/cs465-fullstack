@@ -32,7 +32,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.get(['/travel.html', '/dives.html'], (req, res) => res.redirect('/travel'));
+app.get('/index.html', (req, res) => res.redirect('/'));
+app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 app.use(passport.initialize());
 
 // Allow requests from Angular admin SPA

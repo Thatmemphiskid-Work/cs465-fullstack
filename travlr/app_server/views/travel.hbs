@@ -3,8 +3,8 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Dive Sites - Bhaccasyoniztas Beach Resort Website Template</title>
-	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<title>Travel | Travlr Getaways</title>
+	<link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
 
 <body>
@@ -18,12 +18,13 @@
 					<div>
 						<div class="body">
 							<h1>Travel</h1>
+                            {{#if message}}<p role="status">{{message}}</p>{{/if}}
 
 							<ul id="sites">
 								{{#each trips}}
 									<li>
 										<a href="/api/trips/{{code}}">
-											<img src="images/{{image}}" alt="Img">
+											<img src="/images/{{image}}" alt="{{name}}">
 										</a>
 
 										<h2>
@@ -32,6 +33,8 @@
 
 										<p>
 											{{description}}
+                                            <br>{{resort}} &mdash; {{length}}
+                                            <br>Starts {{start}} &mdash; ${{perPerson}} per person
 										</p>
 									</li>
 								{{/each}}

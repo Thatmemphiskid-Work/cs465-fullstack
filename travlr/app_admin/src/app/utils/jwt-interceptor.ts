@@ -12,8 +12,7 @@ export const jwtInterceptor: HttpInterceptorFn =
       inject(AuthenticationService);
 
     const isAuthAPI =
-      request.url.endsWith('/login') ||
-      request.url.endsWith('/register');
+      request.url.endsWith('/login');
 
     if (
       authenticationService.isLoggedIn() &&

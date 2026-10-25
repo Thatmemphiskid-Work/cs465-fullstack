@@ -30,7 +30,8 @@ function authenticateJWT(req, res, next) {
   try {
     const verified = jwt.verify(
       token,
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { algorithms: ['HS256'] }
     );
 
     req.auth = verified;
@@ -48,7 +49,7 @@ function authenticateJWT(req, res, next) {
 // Authentication routes
 router
   .route('/register')
-  .post(authController.register);
+  .post(authenticateJWT, authController.register);
 
 router
   .route('/login')
